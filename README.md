@@ -9,23 +9,26 @@ This Application is the result of interpreting the assessment brief provided in 
 
 As a computer programmer in a local design studio, you are part of a team that is developing an application for Mountain Rescue England and Wales. This application needs to share weather information on specific locations by collecting user data.  
 
-Mountain Rescue hope the app. will provide the latest and most accurate information for users; reducing accidents and callouts.  
+Mountain Rescue hopes the app. will provide the latest and most accurate information for users; reducing accidents and call-outs.  
 
-You are to write a program/source-code for an algorithm which could be used in development of the above application using appropriate tools from an IDE. For example, the app may need to sort sets of data. 
+You are to write a program/source code for an algorithm that could be used in the development of the above application using appropriate tools from an IDE. For example, the app may need to sort sets of data. 
 
-Ensure you evaluate the source- code; consider the debugging facilities that are available in your IDE and how any issues identified will be rectified. Your application needs to be as robust and secure as possible. 
+Ensure you evaluate the source code; consider the debugging facilities that are available in your IDE and how any issues identified will be rectified. Your application needs to be as robust and secure as possible. 
 
-## Instructions
+## Instructions (Windows OS)
 
-In order to run this application, you will need the Python Interpreter Installed on your machine. You can find out how to do that [here](https://www.python.org/)
+Prerequisites: 
 
-- Once you have the Python interpreter installed, navigate your CLI to the parent directory of this file.
-- To make sure that you have all of the required Python modules (libraries) installed, type the following command into your CLI and hit Enter:
-```bash
-    pip install -r requirements.txt 
-```
-_This above command will instruct [pip](https://pypi.org/project/pip/) (Python's Package Manager) to install the Python modules listed in `requirements.txt` onto your machine. This step is important as these modules are necessary for the application to run!!_ 
-- Once you have installed the required modules, you can go ahead and run the application with the command:
-```
-    python main.py
-```
+- Python ^3 interpreter installed locally. You can find out how to do that [here](https://www.python.org/)
+
+
+    - Clone or fork this repository to your local machine.
+    - Navigate your CLI to inside the projects directory using the `cd` command.
+    - Install the required third-party libraries, using the following command:
+    ```bash
+        pip install -r requirements.txt 
+    ```
+    - Run the application using the following command:
+    ```
+        python main.py
+    ```
