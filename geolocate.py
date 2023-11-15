@@ -3,38 +3,52 @@ import geocoder
 import inquirer
 import httpx
 from dotenv import load_dotenv
+
 load_dotenv()
 
-geolocation_method_options = [
-    "From my IP address",
-    "Provide place name"
-]
+geolocation_method_options = ["From my IP address", "Provide place name"]
 
 
-def select_geolocation_method():
+def get_user_geolocation_method_selection():
     question = [
         inquirer.List(
-            "location_method",
-            message="What method would you like to use to get weather data?",
-            choices=geolocation_method_options
+            "geolocation_method",
+            message="What geolocation method would you like to use to get weather data?",
+            choices=geolocation_method_options,
         ),
     ]
 
     choices = inquirer.prompt(question)
-    locate_method = choices["location_method"]
+    locate_method = choices["geolocation_method"]
 
     return locate_method
 
 
-def from_ip():
+async def get_coordinates(geolocation_method):
+    if geolocation_method == geolocation_method_options[0]:
+        return get_coordinates_from_ip_address()
+    elif geolocation_method == geolocation_method_options[1]:
+        return await get_coords_from_place_name()
+    else:
+        return get_coordinates_from_ip_address()
+
+
+def get_coordinates_from_ip_address():
     g = geocoder.ip("me")
 
     return g.latlng
 
 
-def select_location(locations):
+async def get_coords_from_place_name():
+    place = await get_desired_place()
+
+    return [place["lat"], place["lon"]]
+
+
+def get_user_place_selection(places):
     options = [
-        f"{loc['name']}, {loc['region']}, {loc['country']}" for loc in locations]
+        f"{place['name']}, {place['region']}, {place['country']}" for place in places
+    ]
 
     question = [
         inquirer.List(
@@ -47,12 +61,15 @@ def select_location(locations):
     answers = inquirer.prompt(question)
     selected_location = answers["selected_location"]
 
-    for location in locations:
-        if selected_location == f"{location['name']}, {location['region']}, {location['country']}":
-            return location
+    for place in places:
+        if (
+            selected_location
+            == f"{place['name']}, {place['region']}, {place['country']}"
+        ):
+            return place
 
 
-async def get_location():
+async def get_desired_place():
     WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
     WEATHER_API_HOST = os.getenv("WEATHER_API_HOST")
     BASE_URL = "https://" + WEATHER_API_HOST
@@ -60,46 +77,28 @@ async def get_location():
 
     headers = {
         "X-RapidAPI-Key": WEATHER_API_KEY,
-        "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
+        "X-RapidAPI-Host": WEATHER_API_HOST,
     }
 
-    search_term = input("Please enter place name:\n")
+    place_name = input("Please enter place name:\n")
 
     async with httpx.AsyncClient() as client:
         while True:
             try:
                 response = await client.get(
-                    SEARCH_URL,
-                    headers=headers,
-                    params={"q": search_term}
+                    SEARCH_URL, headers=headers, params={"q": place_name}
                 )
 
-                found_locations = response.json()
+                matching_place_names = response.json()
 
-                if len(found_locations) == 0:
-                    search_term = input("No matches found, please try entering place name again \n")
-                if len(found_locations) == 1:
-                    return found_locations[0]
-                if len(found_locations) > 1:
-                    return select_location(found_locations)
+                if len(matching_place_names) == 0:
+                    place_name = input(
+                        "No matches found, please try entering place name again \n"
+                    )
+                if len(matching_place_names) == 1:
+                    return matching_place_names[0]
+                if len(matching_place_names) > 1:
+                    return get_user_place_selection(matching_place_names)
 
             except httpx.RequestError as e:
                 print(f"Error fetching data, please try again: {str(e)}")
-
-
-async def from_place_name():
-    loc = await get_location()
-
-    return [loc["lat"], loc["lon"]]
-
-async def geolocate(geolocation_method):
-    geolocation = None
-
-    if geolocation_method == geolocation_method_options[0]:
-        geolocation = from_ip()
-    elif geolocation_method == geolocation_method_options[1]:
-        geolocation = await from_place_name()
-    else:
-        geolocation = from_ip()
-
-    return geolocation
