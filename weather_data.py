@@ -13,7 +13,7 @@ async def get_weather_data(geolocation):
 
     headers = {
         "X-RapidAPI-Key": WEATHER_API_KEY,
-        "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
+        "X-RapidAPI-Host": WEATHER_API_HOST,
     }
 
     querystring = {"q": f"{latitude}, {longitude}"}
