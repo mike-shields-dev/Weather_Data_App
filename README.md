@@ -17,13 +17,13 @@ Ensure you evaluate the source code; consider the debugging facilities that are 
 
 ## Instructions (Windows OS)
 
-Prerequisites: 
+### Prerequisites: 
 
-- Python ^3 interpreter installed locally. You can find out how to do that [here](https://www.python.org/)
+Python ^3 interpreter and PIP installed locally. (You can find out how to do that [here](https://www.python.org/))
 
+### Running the application 
 
-    - Clone or fork this repository to your local machine.
-    - Navigate your CLI to inside the projects directory using the `cd` command.
+    - Navigate your CLI/Terminal to within the project's directory `source_code` directory, using the `cd` command.
     - Install the required third-party libraries, using the following command:
     ```bash
         pip install -r requirements.txt 
